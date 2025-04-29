@@ -85,9 +85,13 @@ function initializeApp() {
  * and initializes the app if valid.
  */
 async function checkAuthAndInitialize() {
-  // Add the loading message with a specific ID
-  document.body.innerHTML = 
-    `<p id="${AUTH_MESSAGE_ID}" style="padding: 20px; font-family: sans-serif;">Authenticating...</p>`;
+  // Create and append the loading message
+  const loadingMessage = document.createElement('p');
+  loadingMessage.id = AUTH_MESSAGE_ID;
+  loadingMessage.style.padding = '20px';
+  loadingMessage.style.fontFamily = 'sans-serif';
+  loadingMessage.textContent = 'Authenticating...';
+  document.body.appendChild(loadingMessage);
 
   const queryParams = new URLSearchParams(window.location.search);
   const token = queryParams.get('token');
