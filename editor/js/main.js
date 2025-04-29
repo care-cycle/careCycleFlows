@@ -17,6 +17,7 @@ import { editorState } from "./editor/editorState.js";
 const ADMIN_LOGIN_URL = 'https://admin.carecycle.ai/login';
 // Use production API URL. For local dev, you might need to change this or use environment variables.
 const API_VALIDATION_URL = 'https://api.nodable.ai/api/admin/auth/validate'; 
+const AUTH_MESSAGE_ID = 'auth-loading-message'; // ID for the loading message element
 
 // Clear all default node types
 LiteGraph.clearRegisteredTypes();
@@ -25,14 +26,15 @@ LiteGraph.clearRegisteredTypes();
  * Initializes the LiteGraph editor UI and components.
  */
 function initializeApp() {
-  // Clear any loading message
-  document.body.innerHTML = ''; 
-  document.body.style.margin = '0'; // Reset margin potentially added by messages
-  document.body.style.padding = '0';
-  document.body.style.display = 'flex'; // Or block, depending on layout needs
-  document.body.style.height = '100vh';
-  document.body.style.overflow = 'hidden';
+  // Remove the loading message specifically
+  const loadingMessage = document.getElementById(AUTH_MESSAGE_ID);
+  if (loadingMessage) {
+    loadingMessage.remove();
+  }
 
+  // Assuming the necessary HTML structure (canvas, buttons, etc.) exists 
+  // in the original HTML and wasn't wiped out.
+  
   // Initialize graph
   const graph = new LGraph();
 
@@ -74,7 +76,9 @@ function initializeApp() {
  * and initializes the app if valid.
  */
 async function checkAuthAndInitialize() {
-  document.body.innerHTML = '<p style="padding: 20px; font-family: sans-serif;">Authenticating...</p>';
+  // Add the loading message with a specific ID
+  document.body.innerHTML = 
+    `<p id="${AUTH_MESSAGE_ID}" style="padding: 20px; font-family: sans-serif;">Authenticating...</p>`;
 
   const queryParams = new URLSearchParams(window.location.search);
   const token = queryParams.get('token');
@@ -103,13 +107,21 @@ async function checkAuthAndInitialize() {
       initializeApp(); // Token is valid, initialize the editor
     } else {
       console.error("Token validation failed:", response.status, response.statusText);
-      document.body.innerHTML = '<p style="padding: 20px; font-family: sans-serif; color: red;">Authentication failed. Redirecting to login...</p>';
+      const errorMessage = document.getElementById(AUTH_MESSAGE_ID);
+      if (errorMessage) {
+         errorMessage.style.color = 'red';
+         errorMessage.textContent = 'Authentication failed. Redirecting to login...';
+      }
       // Wait a moment before redirecting so user might see the message
       setTimeout(() => { window.location.href = ADMIN_LOGIN_URL; }, 2000);
     }
   } catch (error) {
     console.error("Error during token validation request:", error);
-    document.body.innerHTML = '<p style="padding: 20px; font-family: sans-serif; color: red;">Error during authentication. Redirecting to login...</p>';
+    const errorMessage = document.getElementById(AUTH_MESSAGE_ID);
+    if (errorMessage) {
+       errorMessage.style.color = 'red';
+       errorMessage.textContent = 'Error during authentication. Redirecting to login...';
+    }
     // Wait a moment before redirecting
     setTimeout(() => { window.location.href = ADMIN_LOGIN_URL; }, 2000);
   }
