@@ -29,6 +29,29 @@ module.exports = {
           "text-muted": "#a3a3a3", // Muted text color
         },
       },
+      {
+        light: {
+          ...require("daisyui/src/theming/themes")["light"],
+          primary: "#4F46E5", // Keep primary consistent
+          "primary-focus": "#4338CA",
+          "primary-content": "#ffffff",
+
+          secondary: "#6B7280", // Keep secondary consistent
+          "secondary-focus": "#4B5563",
+          "secondary-content": "#ffffff",
+
+          // Explicitly set base colors for light mode
+          "base-100": "#ffffff", // Canvas background (White)
+          "base-200": "#f9fafb", // Node background (Very light gray)
+          "base-300": "#f0f0f0", // Grid lines (Slightly darker gray)
+          "base-content": "#1f2937", // Text color (Dark Gray)
+
+          // Text colors will likely use Daisy UI light defaults
+          // "base-content": "#1f2937", // Example: default light text
+        },
+      },
     ],
+    // Optionally set a default theme if needed, or manage via JS
+    // defaultTheme: "dark",
   },
 };

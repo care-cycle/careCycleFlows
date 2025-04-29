@@ -14,4 +14,10 @@
   .textarea-unsaved {
     @apply border-dashed;
   }
+
+  /* Optional: Add styles for the svg directly if needed */
+  #theme-toggle svg {
+      /* Classes are now added via JS, but you could add fallbacks here */
+      /* @apply w-4 h-4 stroke-current; */
+  }
 }

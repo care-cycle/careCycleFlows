@@ -8,6 +8,11 @@ import { generateFlowConfig } from "../utils/export.js";
 import { createFlowFromConfig } from "../utils/import.js";
 import { validateFlow } from "../utils/validation.js";
 import { editorState } from "../editor/editorState.js";
+// Import LGraphCanvas to access static properties like link_type_colors
+// import { LGraphCanvas } from "litegraph.js"; 
+// Import SVG content directly
+import sunIconSvg from 'lucide-static/icons/sun.svg?raw';
+import moonIconSvg from 'lucide-static/icons/moon.svg?raw';
 
 /**
  * Manages the toolbar UI and actions
@@ -20,10 +25,11 @@ export class Toolbar {
   constructor(graph) {
     this.graph = graph;
     this.setupButtons();
+    this.setupThemeToggle();
   }
 
   /**
-   * Sets up toolbar button event listeners
+   * Sets up toolbar button event listeners (excluding theme toggle)
    */
   setupButtons() {
     // Get modal elements
@@ -49,6 +55,51 @@ export class Toolbar {
 
     document.getElementById("import-flow").onclick = () => this.handleImport();
     document.getElementById("export-flow").onclick = () => this.handleExport();
+  }
+
+  /**
+   * Sets up the theme toggle button and logic
+   */
+  setupThemeToggle() {
+    const themeToggle = document.getElementById("theme-toggle");
+    const htmlElement = document.documentElement;
+
+    if (!themeToggle) {
+      console.warn("Theme toggle button not found in DOM.");
+      return;
+    }
+
+    // Simplified function to apply theme and update icon
+    const applyTheme = (theme) => {
+      htmlElement.setAttribute("data-theme", theme);
+      localStorage.setItem("theme", theme); 
+
+      // --- Update Icons --- 
+      if (theme === 'light') {
+        themeToggle.innerHTML = moonIconSvg;
+      } else {
+        themeToggle.innerHTML = sunIconSvg;
+      }
+      const svgElement = themeToggle.querySelector('svg');
+      if (svgElement) {
+        svgElement.classList.add('w-4', 'h-4', 'stroke-current');
+      }
+      // --- End Icon Update ---
+      
+      // REMOVED: requestAnimationFrame and all LiteGraph color updates
+      console.log(`UI theme set to: ${theme}`); // Simplified log
+    };
+
+    // Determine initial theme
+    const initialTheme = localStorage.getItem("theme") || htmlElement.getAttribute("data-theme") || 'dark';
+    applyTheme(initialTheme);
+    console.log(`Initial UI theme set to: ${initialTheme}, icon injected.`); // Simplified log
+
+    themeToggle.onclick = () => {
+      const currentTheme = htmlElement.getAttribute("data-theme") || 'dark';
+      const newTheme = currentTheme === "light" ? "dark" : "light";
+      applyTheme(newTheme);
+    };
   }
 
   /**

@@ -8,6 +8,7 @@ SPDX-License-Identifier: BSD 2-Clause License
 <html data-theme="dark">
 
 <head>
+  <meta charset="UTF-8">
   <title>FLOWS</title>
 
   <link rel="apple-touch-icon" sizes="180x180" href="./apple-touch-icon.png">
@@ -106,12 +107,13 @@ SPDX-License-Identifier: BSD 2-Clause License
     </div>
 
     <!-- Graph Container -->
-    <div id="graph-container" class="flex-1 relative bg-base-300">
+    <div id="graph-container" class="flex-1 relative">
       <canvas id="graph-canvas"></canvas>
 
-      <!-- Zoom Controls -->
+      <!-- Controls Container -->
       <div class="absolute bottom-4 right-4">
-        <div class="bg-base-200 rounded-lg flex flex-col divide-y divide-base-300">
+        <div class="bg-base-200 rounded-lg flex flex-col divide-y divide-base-300 shadow-md">
+          <!-- Zoom In -->
           <button id="zoom-in"
             class="p-2 aspect-square focus:outline-none hover:bg-base-300 transition-colors rounded-t-lg rounded-b-none">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
@@ -119,12 +121,18 @@ SPDX-License-Identifier: BSD 2-Clause License
               <path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
             </svg>
           </button>
+          <!-- Zoom Out -->
           <button id="zoom-out"
-            class="p-2 aspect-square focus:outline-none hover:bg-base-300 transition-colors rounded-b-lg rounded-t-none">
+            class="p-2 aspect-square focus:outline-none hover:bg-base-300 transition-colors">
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2"
               stroke="currentColor" class="w-4 h-4">
               <path stroke-linecap="round" stroke-linejoin="round" d="M5 12h14" />
             </svg>
+          </button>
+          <!-- Theme Toggle - Button content will be set by JS -->
+          <button id="theme-toggle"
+            class="p-2 aspect-square focus:outline-none hover:bg-base-300 transition-colors rounded-b-lg rounded-t-none">
+            <!-- REMOVED icon spans -->
           </button>
         </div>
       </div>
@@ -138,11 +146,11 @@ SPDX-License-Identifier: BSD 2-Clause License
   <!-- Confirmation modal before creating new flow -->
   <dialog id="new-flow-modal" class="modal">
     <div class="modal-box">
-      <h3 class="font-bold text-lg">Create New Flow?</h3>
-      <p class="py-4">This will clear your current work. Are you sure you want to continue?</p>
+      <h3 class="font-bold text-lg">Confirm New Flow</h3>
+      <p class="py-4">Are you sure you want to start a new flow? Any unsaved changes will be lost.</p>
       <div class="modal-action">
-        <button id="cancel-new-flow" class="btn btn-sm btn-secondary">Cancel</button>
-        <button id="confirm-new-flow" class="btn btn-sm btn-primary">Create New</button>
+        <button id="confirm-new-flow" class="btn btn-primary">Confirm</button>
+        <button id="cancel-new-flow" class="btn">Cancel</button>
       </div>
     </div>
     <form method="dialog" class="modal-backdrop">
